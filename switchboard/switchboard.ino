@@ -1,55 +1,71 @@
 #include <CommandLine.h>
 #include <ClickButton.h>
 
+#define NR_BUTTONS 3
+
+
+const char *eventString(int event);
+void handleClickEvent(int button_id, int event);
+
 // ClickButton settings
-const int buttonPin1 = 4;
-ClickButton button1(buttonPin1, LOW, CLICKBTN_PULLUP);
+ClickButton buttons[NR_BUTTONS] = {
+  ClickButton(4, LOW, CLICKBTN_PULLUP),
+  ClickButton(5, LOW, CLICKBTN_PULLUP),
+  ClickButton(6, LOW, CLICKBTN_PULLUP)
+};
 
 // CommandLine settings
 CommandLine commandLine(Serial, "> ");
 Command cmdPrint = Command("print", &cmdHandlePrint);
 
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);
-  pinMode(buttonPin1, INPUT_PULLUP);
+  Serial.println("Starting...");
 
   commandLine.add(cmdPrint);
 
-  // Setup button timers (all in milliseconds / ms)
-  // (These are default if not set, but changeable for convenience)
-  button1.debounceTime   = 20;   // Debounce timer in ms
-  button1.multiclickTime = 250;  // Time limit for multi clicks
-  button1.longClickTime  = 600;  // time until "held-down clicks" register
+  // Setup button timers (all in milliseconds)
+  for (int i = 0; i < NR_BUTTONS; ++i) {
+    buttons[i].debounceTime   = 20;   // Debounce timer in ms
+    buttons[i].multiclickTime = 250;  // Time limit for multi clicks
+    buttons[i].longClickTime  = 600;  // time until "held-down clicks" register
+  }
 }
 
 
-void loop()
-{
-  button1.Update();
+void loop() {
   commandLine.update();
 
-  if (button1.clicks == 1) Serial.println("SINGLE click");
-
-  if (button1.clicks == 2) Serial.println("DOUBLE click");
-
-  if (button1.clicks == 3) Serial.println("TRIPLE click");
-
-  if (button1.clicks == -1) Serial.println("SINGLE LONG click");
-
-  if (button1.clicks == -2) Serial.println("DOUBLE LONG click");
-
-  if (button1.clicks == -3) Serial.println("TRIPLE LONG click");
-
-  if (button1.longClickReleased == true) Serial.println("LONG click released");
+  for (int i = 0; i < NR_BUTTONS; ++i) {
+    buttons[i].Update();
+    if (buttons[i].clicks != 0)
+      handleClickEvent(i, buttons[i].clicks);
+  }
 
   delay(5);
 }
 
+const char *eventString(int event) {
+  switch (event) {
+    case 1:  return "single click"; break;
+    case 2:  return "double click"; break;
+    case 3:  return "triple click"; break;
+    case -1: return "single long click"; break;
+    case -2: return "double long click"; break;
+    case -3: return "triple long click"; break;
+    case CLICKBTN_LONG_RELEASE: return "long click released"; break;
+  }
+}
 
-void cmdHandlePrint(char* tokens)
-{
+void handleClickEvent(int button_id, int event) {
+  char line[50];
+  snprintf(line, 50, "Event on button %d: %s", button_id,
+      eventString(event));
+  Serial.println(line);
+}
+
+void cmdHandlePrint(char* tokens) {
   Serial.println("Hello World!");
 }
 
