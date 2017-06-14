@@ -39,8 +39,7 @@ void loop() {
 
   for (int i = 0; i < NR_BUTTONS; ++i) {
     buttons[i].Update();
-    if (buttons[i].clicks != 0)
-      handleClickEvent(i, buttons[i].clicks);
+    handleClickEvent(i, buttons[i].clicks);
   }
 
   delay(5);
@@ -48,9 +47,9 @@ void loop() {
 
 const char *eventString(int event) {
   switch (event) {
-    case 1:  return "single click"; break;
-    case 2:  return "double click"; break;
-    case 3:  return "triple click"; break;
+    case  1: return "single click"; break;
+    case  2: return "double click"; break;
+    case  3: return "triple click"; break;
     case -1: return "single long click"; break;
     case -2: return "double long click"; break;
     case -3: return "triple long click"; break;
@@ -60,6 +59,9 @@ const char *eventString(int event) {
 
 void handleClickEvent(int button_id, int event) {
   char line[50];
+  if (event == 0)
+    return;  // no event
+
   snprintf(line, 50, "Event on button %d: %s", button_id,
       eventString(event));
   Serial.println(line);
