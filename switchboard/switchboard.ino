@@ -39,27 +39,31 @@ void loop() {
 
   for (int i = 0; i < NR_BUTTONS; ++i) {
     buttons[i].Update();
-    handleClickEvent(i, buttons[i].clicks);
+    handleClickEvent(i, buttons[i].event);
   }
 
   delay(5);
 }
 
-const char *eventString(int event) {
+const char *eventString(ClickEvent event) {
   switch (event) {
-    case  1: return "single click"; break;
-    case  2: return "double click"; break;
-    case  3: return "triple click"; break;
-    case -1: return "single long click"; break;
-    case -2: return "double long click"; break;
-    case -3: return "triple long click"; break;
-    case CLICKBTN_LONG_RELEASE: return "long click released"; break;
+    case kClickEventNone:               return "none";
+    case kClickEventSingle:             return "single click";
+    case kClickEventDouble:             return "double click";
+    case kClickEventTriple:             return "triple click";
+    case kClickEventSingleLong:         return "single long click";
+    case kClickEventDoubleLong:         return "double long click";
+    case kClickEventTripleLong:         return "triple long click";
+    case kClickEventSingleLongRelease:  return "single long release";
+    case kClickEventDoubleLongRelease:  return "double long release";
+    case kClickEventTripleLongRelease:  return "triple long release";
+    default:                            return "invalid";
   }
 }
 
-void handleClickEvent(int button_id, int event) {
+void handleClickEvent(int button_id, ClickEvent event) {
   char line[50];
-  if (event == 0)
+  if (event == kClickEventNone)
     return;  // no event
 
   snprintf(line, 50, "Event on button %d: %s", button_id,
