@@ -21,17 +21,28 @@ ClickButton buttons[kNrButtons] = {
 WindowAction action_mapping[kNrButtons][kClickEventMax] = {
   { // Button 0
     /*                                 Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
-    /* kClickEventSingle            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDouble            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingle            */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDouble            */ { kDirUp,   {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
     /* kClickEventTriple            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventSingleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDoubleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingleLong        */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDoubleLong        */ { kDirUp,   {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
     /* kClickEventTripleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventSingleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDoubleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingleLongRelease */ { kDirStop, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDoubleLongRelease */ { kDirStop, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
     /* kClickEventTripleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} }
   },
-  WINDOW_ACTION_IGNORE,
+  { // Button 1
+    /*                                 Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
+    /* kClickEventSingle            */ { kDirDown, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDouble            */ { kDirDown, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
+    /* kClickEventTriple            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingleLong        */ { kDirDown, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDoubleLong        */ { kDirDown, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
+    /* kClickEventTripleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingleLongRelease */ { kDirStop, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDoubleLongRelease */ { kDirStop, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
+    /* kClickEventTripleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} }
+  },
   WINDOW_ACTION_IGNORE
 };
 
@@ -58,6 +69,7 @@ void setup() {
 
 void loop() {
   commandLine.update();
+  win_ctl.Update();
 
   for (int i = 0; i < kNrButtons; ++i) {
     buttons[i].Update();
