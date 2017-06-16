@@ -1,4 +1,5 @@
 
+#include <inttypes.h>
 
 const int kMaxNrWindows = 16;
 const long kMaxRunTime = 20000;     // maximum time to run in one direction (in ms)
@@ -31,16 +32,16 @@ struct WindowAction {
 
 class WindowControl {
  public:
-  WindowControl(int nr_of_windows);
+  WindowControl();
   void Update();
   void ExecuteAction(const WindowAction *action);
 
  private:
-  int nr_windows_;
   long last_time_;
   long run_timer_[kMaxNrWindows];
   long pause_timer_[kMaxNrWindows];
   WinCtlDirection next_dir_[kMaxNrWindows];
   WinCtlDirection current_dir_[kMaxNrWindows];
+  void SendCommand(int window_nr, WinCtlDirection dir);
 };
 

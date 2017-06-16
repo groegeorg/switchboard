@@ -6,9 +6,11 @@
 const char *eventString(int event);
 void handleClickEvent(int button_id, int event);
 
-const int kNrButtons = 3;
+
+WindowControl win_ctl;
 
 // ClickButton settings
+const int kNrButtons = 3;
 ClickButton buttons[kNrButtons] = {
   ClickButton(4, LOW, CLICKBTN_PULLUP),
   ClickButton(5, LOW, CLICKBTN_PULLUP),
@@ -16,7 +18,7 @@ ClickButton buttons[kNrButtons] = {
 };
 
 
-WindowAction actionMapping[kNrButtons][kClickEventMax] = {
+WindowAction action_mapping[kNrButtons][kClickEventMax] = {
   { // Button 0
     /*                                 Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
     /* kClickEventSingle            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
@@ -65,6 +67,21 @@ void loop() {
   delay(5);
 }
 
+void handleClickEvent(int button_id, ClickEvent event) {
+  char line[50];
+  if (event == kClickEventNone)
+    return;  // no event
+
+  snprintf(line, 50, "Event on button %d: %s", button_id,
+      eventString(event));
+  Serial.println(line);
+
+  if (button_id >= 0 && button_id < kNrButtons &&
+      event >= 0 && event < kClickEventMax) {
+    win_ctl.ExecuteAction(&action_mapping[button_id][event]);
+  }
+}
+
 const char *eventString(ClickEvent event) {
   switch (event) {
     case kClickEventNone:               return "none";
@@ -81,17 +98,8 @@ const char *eventString(ClickEvent event) {
   }
 }
 
-void handleClickEvent(int button_id, ClickEvent event) {
-  char line[50];
-  if (event == kClickEventNone)
-    return;  // no event
-
-  snprintf(line, 50, "Event on button %d: %s", button_id,
-      eventString(event));
-  Serial.println(line);
-}
-
 void cmdHandlePrint(char* tokens) {
   Serial.println("Hello World!");
 }
 
+// vim: set ft=c:

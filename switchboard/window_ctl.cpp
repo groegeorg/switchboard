@@ -1,8 +1,8 @@
 
 #include "window_ctl.h"
+#include "Arduino.h"
 
-WindowControl::WindowControl(int nr_of_windows) {
-  nr_windows_ = nr_of_windows;
+WindowControl::WindowControl() {
   last_time_ = 0;
   for (int i = 0; i < kMaxNrWindows; ++i) {
     run_timer_[i] = 0;
@@ -19,7 +19,7 @@ void WindowControl::ExecuteAction(const WindowAction *action) {
   for (int i = 0; i < kMaxNrWindows; ++i) {
     if (action->windows[i]) {
       // set timer and direction for window
-      next_dir_[i] = action->dir
+      next_dir_[i] = action->dir;
       run_timer_[i] = kMaxRunTime;
     }
   }
@@ -65,7 +65,13 @@ void WindowControl::Update() {
   }
 }
 
-void SendCommand(int window_nr, WinCtlDirection dir) {
+void WindowControl::SendCommand(int window_nr, WinCtlDirection dir) {
+  char line[50];
 
+  snprintf(line, 50, "  win %d: %s", window_nr,
+      dir == kDirDown ? "down" :
+      dir == kDirUp   ? "up" :
+      dir == kDirStop ? "stop" : "error!!");
+  Serial.println(line);
 }
 
