@@ -1,18 +1,38 @@
 #include <CommandLine.h>
 #include <ClickButton.h>
-
-#define NR_BUTTONS 3
+#include "window_ctl.h"
 
 
 const char *eventString(int event);
 void handleClickEvent(int button_id, int event);
 
+const int kNrButtons = 3;
+
 // ClickButton settings
-ClickButton buttons[NR_BUTTONS] = {
+ClickButton buttons[kNrButtons] = {
   ClickButton(4, LOW, CLICKBTN_PULLUP),
   ClickButton(5, LOW, CLICKBTN_PULLUP),
   ClickButton(6, LOW, CLICKBTN_PULLUP)
 };
+
+
+WindowAction actionMapping[kNrButtons][kClickEventMax] = {
+  { // Button 0
+    /*                                 Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
+    /* kClickEventSingle            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDouble            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventTriple            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDoubleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventTripleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventSingleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventDoubleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* kClickEventTripleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} }
+  },
+  WINDOW_ACTION_IGNORE,
+  WINDOW_ACTION_IGNORE
+};
+
 
 // CommandLine settings
 CommandLine commandLine(Serial, "> ");
@@ -26,7 +46,7 @@ void setup() {
   commandLine.add(cmdPrint);
 
   // Setup button timers (all in milliseconds)
-  for (int i = 0; i < NR_BUTTONS; ++i) {
+  for (int i = 0; i < kNrButtons; ++i) {
     buttons[i].debounceTime   = 20;   // Debounce timer in ms
     buttons[i].multiclickTime = 250;  // Time limit for multi clicks
     buttons[i].longClickTime  = 600;  // time until "held-down clicks" register
@@ -37,7 +57,7 @@ void setup() {
 void loop() {
   commandLine.update();
 
-  for (int i = 0; i < NR_BUTTONS; ++i) {
+  for (int i = 0; i < kNrButtons; ++i) {
     buttons[i].Update();
     handleClickEvent(i, buttons[i].event);
   }
