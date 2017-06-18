@@ -19,29 +19,17 @@ ClickButton buttons[kNrButtons] = {
 
 
 WindowAction action_mapping[kNrButtons][kClickEventMax] = {
-  { // Button 0
-    /*                                 Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
-    /* kClickEventSingle            */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDouble            */ { kDirUp,   {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* kClickEventTriple            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventSingleLong        */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDoubleLong        */ { kDirUp,   {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* kClickEventTripleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventSingleLongRelease */ { kDirStop, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDoubleLongRelease */ { kDirStop, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* kClickEventTripleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} }
+  {
+    /* Button 0        Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
+    /* Single Click */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* Double Click */ { kDirUp,   {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
+    /* Triple Click */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
   },
-  { // Button 1
-    /*                                 Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
-    /* kClickEventSingle            */ { kDirDown, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDouble            */ { kDirDown, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* kClickEventTriple            */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventSingleLong        */ { kDirDown, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDoubleLong        */ { kDirDown, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* kClickEventTripleLong        */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventSingleLongRelease */ { kDirStop, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
-    /* kClickEventDoubleLongRelease */ { kDirStop, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* kClickEventTripleLongRelease */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} }
+  {
+    /* Button 1        Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
+    /* Single Click */ { kDirDown, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* Double Click */ { kDirDown, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
+    /* Triple Click */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
   },
   WINDOW_ACTION_IGNORE
 };
@@ -73,40 +61,37 @@ void loop() {
 
   for (int i = 0; i < kNrButtons; ++i) {
     buttons[i].Update();
-    handleClickEvent(i, buttons[i].event);
+    handleClickEvent(i, buttons[i].clickType, buttons[i].clickCount);
   }
 
   delay(5);
 }
 
-void handleClickEvent(int button_id, ClickEvent event) {
+void handleClickEvent(int button_id, ClickEventType type, uint8_t count) {
   char line[50];
-  if (event == kClickEventNone)
+  if (count == 0)
     return;  // no event
 
-  snprintf(line, 50, "Event on button %d: %s", button_id,
-      eventString(event));
+  snprintf(line, 50, "Event on button %d: %d-%s",
+           button_id, count, eventString(type));
   Serial.println(line);
 
-  if (button_id >= 0 && button_id < kNrButtons &&
-      event >= 0 && event < kClickEventMax) {
-    win_ctl.ExecuteAction(&action_mapping[button_id][event]);
+  if (button_id >= 0 && button_id < kNrButtons && count > 0 && count <= 3) {
+    if (type == kClickEventRelease) {
+      win_ctl.ExecuteAction(&action_mapping[button_id][count-1], true);
+    } else {
+      win_ctl.ExecuteAction(&action_mapping[button_id][count-1], false);
+    }
   }
 }
 
-const char *eventString(ClickEvent event) {
-  switch (event) {
-    case kClickEventNone:               return "none";
-    case kClickEventSingle:             return "single click";
-    case kClickEventDouble:             return "double click";
-    case kClickEventTriple:             return "triple click";
-    case kClickEventSingleLong:         return "single long click";
-    case kClickEventDoubleLong:         return "double long click";
-    case kClickEventTripleLong:         return "triple long click";
-    case kClickEventSingleLongRelease:  return "single long release";
-    case kClickEventDoubleLongRelease:  return "double long release";
-    case kClickEventTripleLongRelease:  return "triple long release";
-    default:                            return "invalid";
+const char *eventString(ClickEventType type) {
+  switch (type) {
+    case kClickEventNone:    return "none";
+    case kClickEventClick:   return "click";
+    case kClickEventHold:    return "hold";
+    case kClickEventRelease: return "release";
+    default:                 return "invalid";
   }
 }
 

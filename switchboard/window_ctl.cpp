@@ -12,14 +12,20 @@ WindowControl::WindowControl() {
   }
 }
 
-void WindowControl::ExecuteAction(const WindowAction *action) {
-  if (action->dir == kDirNone)
+void WindowControl::ExecuteAction(const WindowAction *action, bool stop) {
+  WinCtlDirection direction;
+  if (stop)
+    direction = kDirStop;
+  else
+    direction = action->dir;
+
+  if (direction == kDirNone)
     return;
 
   for (int i = 0; i < kMaxNrWindows; ++i) {
     if (action->windows[i]) {
       // set timer and direction for window
-      next_dir_[i] = action->dir;
+      next_dir_[i] = direction;
       run_timer_[i] = kMaxRunTime;
     }
   }
@@ -52,14 +58,14 @@ void WindowControl::Update() {
 
     // check if we need to send a command
     if (current_dir_[i] != next_dir_[i]) {
-      if (current_dir_[i] != kDirStop) {
+      if (current_dir_[i] == kDirStop) {
+        SendCommand(i, next_dir_[i]);
+        current_dir_[i] = next_dir_[i];
+      } else {
         // this is a direction change - enter pause
         SendCommand(i, kDirStop);
         current_dir_[i] = kDirStop;
         pause_timer_[i] = kPauseTime;
-      } else {
-        SendCommand(i, next_dir_[i]);
-        current_dir_[i] = next_dir_[i];
       }
     }
   }
