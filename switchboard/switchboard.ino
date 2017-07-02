@@ -23,13 +23,13 @@ WindowAction action_mapping[kNrButtons][kClickEventMax] = {
     /* Button 0        Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
     /* Single Click */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
     /* Double Click */ { kDirUp,   {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* Triple Click */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* Triple Click */ { kDirUp,   {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} },
   },
   {
     /* Button 1        Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
     /* Single Click */ { kDirDown, {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
     /* Double Click */ { kDirDown, {1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1} },
-    /* Triple Click */ { kDirNone, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
+    /* Triple Click */ { kDirDown, {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1} },
   },
   WINDOW_ACTION_IGNORE
 };
@@ -42,8 +42,9 @@ Command cmdPrint = Command("print", &cmdHandlePrint);
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Starting...");
+  Serial.print("Starting...");
 
+  win_ctl.Setup();
   commandLine.add(cmdPrint);
 
   // Setup button timers (all in milliseconds)
@@ -52,6 +53,7 @@ void setup() {
     buttons[i].multiclickTime = 250;  // Time limit for multi clicks
     buttons[i].longClickTime  = 600;  // time until "held-down clicks" register
   }
+  Serial.println("ok");
 }
 
 
