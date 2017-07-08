@@ -84,7 +84,7 @@ void WindowControl::SetAction(uint8_t win_nr, WinCtlDirection dir) {
   }
 
   // set timer and direction for window
-  next_dir_[win_nr] = direction;
+  next_dir_[win_nr] = dir;
   run_timer_[win_nr] = kMaxRunTime;
 }
 
