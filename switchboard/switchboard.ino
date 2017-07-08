@@ -2,9 +2,10 @@
 #include <ClickButton.h>
 #include "window_ctl.h"
 
-
+// Prototypes
 const char *eventString(int event);
 void handleClickEvent(int button_id, int event);
+void cmdHelpClick();
 
 
 WindowControl win_ctl;
@@ -38,14 +39,17 @@ WindowAction action_mapping[kNrButtons][kClickEventMax] = {
 // CommandLine settings
 CommandLine commandLine(Serial, "> ");
 Command cmdPrint = Command("print", &cmdHandlePrint);
+Command cmdClick = Command("click", &cmdHandleClick);
 
 
 void setup() {
   Serial.begin(9600);
   Serial.print("Starting...");
 
-  win_ctl.Setup();
   commandLine.add(cmdPrint);
+  commandLine.add(cmdClick);
+
+  win_ctl.Setup();
 
   // Setup button timers (all in milliseconds)
   for (int i = 0; i < kNrButtons; ++i) {
@@ -69,20 +73,20 @@ void loop() {
   delay(5);
 }
 
-void handleClickEvent(int button_id, ClickEventType type, uint8_t count) {
+void handleClickEvent(int button_id, ClickEventType type, uint8_t nr_clicks) {
   char line[50];
-  if (count == 0)
+  if (nr_clicks == 0)
     return;  // no event
 
   snprintf(line, 50, "Event on button %d: %d-%s",
-           button_id, count, eventString(type));
+           button_id, nr_clicks, eventString(type));
   Serial.println(line);
 
-  if (button_id >= 0 && button_id < kNrButtons && count > 0 && count <= 3) {
+  if (button_id >= 0 && button_id < kNrButtons && nr_clicks <= 3) {
     if (type == kClickEventRelease) {
-      win_ctl.ExecuteAction(&action_mapping[button_id][count-1], true);
+      win_ctl.ExecuteAction(&action_mapping[button_id][nr_clicks-1], true);
     } else {
-      win_ctl.ExecuteAction(&action_mapping[button_id][count-1], false);
+      win_ctl.ExecuteAction(&action_mapping[button_id][nr_clicks-1], false);
     }
   }
 }
@@ -99,6 +103,53 @@ const char *eventString(ClickEventType type) {
 
 void cmdHandlePrint(char* tokens) {
   Serial.println("Hello World!");
+}
+
+void cmdHandleClick(int argc, char *argv[]) {
+  int button_id = -1;
+  int click_cnt = -1;
+  ClickEventType ev_type = kClickEventNone;
+
+  if (argc < 3) {
+    Serial.println("Error: at least three arguments required!");
+    cmdHelpClick();
+    return;
+  }
+  if (sscanf(argv[0], "%d", &button_id) != 1 ||
+      button_id < 0 ||
+      button_id >= kNrButtons) {
+    Serial.println("Error: invalid argument button id");
+    cmdHelpClick();
+    return;
+  }
+  switch (argv[1][0]) {
+    case 'c': ev_type = kClickEventClick; break;
+    case 'h': ev_type = kClickEventHold; break;
+    case 'r': ev_type = kClickEventRelease; break;
+    default:
+      Serial.println("Error: invalid argument event type");
+      cmdHelpClick();
+      return;
+  }
+  if (sscanf(argv[2], "%d", &click_cnt) != 1 ||
+      click_cnt < 1 ||
+      click_cnt > 3) {
+    Serial.println("Error: invalid argument click count");
+    cmdHelpClick();
+    return;
+  }
+
+  handleClickEvent(button_id, ev_type, click_cnt);
+}
+
+void cmdHelpClick() {
+  Serial.println("Syntax:");
+  Serial.println("   click button_id event_type click_cnt");
+  Serial.println("   button_id  ... number of the button");
+  Serial.println("   event_type ... c (click)");
+  Serial.println("                  h (hold)");
+  Serial.println("                  r (release)");
+  Serial.println("   click_cnt  ... number of times clicked");
 }
 
 // vim: set ft=c:
