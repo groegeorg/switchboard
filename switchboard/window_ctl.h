@@ -22,7 +22,7 @@ enum WinCtlDirection {
   kDirStop =  2
 };
 
-struct WindowAction {
+struct WinActionGroup {
   int8_t dir;
   int8_t windows[kMaxNrWindows];  // if we get memory problems, this could be converted to a bit array
 };
@@ -31,7 +31,8 @@ class WindowControl {
  public:
   Setup();
   void Update();
-  void ExecuteAction(const WindowAction *action, bool stop);
+  void SetAction(uint8_t win_nr, WinCtlDirection dir);
+  void SetActionGroup(const WinActionGroup *action, bool stop);
 
  private:
   uint16_t gp_reg[kNrModules];   // actual value of the general purpuse registers GP0 (lower 8 bits) and GP1 (upper 8 bits)

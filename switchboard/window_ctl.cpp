@@ -51,7 +51,7 @@ WindowControl::Setup() {
   }
 }
 
-void WindowControl::ExecuteAction(const WindowAction *action, bool stop) {
+void WindowControl::SetActionGroup(const WinActionGroup *action, bool stop) {
   WinCtlDirection direction;
   if (stop)
     direction = kDirStop;
@@ -68,6 +68,24 @@ void WindowControl::ExecuteAction(const WindowAction *action, bool stop) {
       run_timer_[i] = kMaxRunTime;
     }
   }
+}
+
+void WindowControl::SetAction(uint8_t win_nr, WinCtlDirection dir) {
+  if (win_nr >= kMaxNrWindows) {
+    return;
+  }
+  switch (dir) {
+    case kDirUp:
+    case kDirDown:
+    case kDirStop:
+      break;
+    default:
+      return;
+  }
+
+  // set timer and direction for window
+  next_dir_[win_nr] = direction;
+  run_timer_[win_nr] = kMaxRunTime;
 }
 
 void WindowControl::Update() {

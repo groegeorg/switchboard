@@ -4,7 +4,7 @@
 
 // Prototypes
 const char *eventString(int event);
-void handleClickEvent(int button_id, int event);
+void clickEvent(int button_id, int event);
 void cmdHelpClick();
 
 
@@ -19,7 +19,7 @@ ClickButton buttons[kNrButtons] = {
 };
 
 
-WindowAction action_mapping[kNrButtons][kClickEventMax] = {
+WinActionGroup action_mapping[kNrButtons][kClickEventMax] = {
   {
     /* Button 0        Window Nr:   0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15  */
     /* Single Click */ { kDirUp,   {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0} },
@@ -67,13 +67,13 @@ void loop() {
 
   for (int i = 0; i < kNrButtons; ++i) {
     buttons[i].Update();
-    handleClickEvent(i, buttons[i].clickType, buttons[i].clickCount);
+    clickEvent(i, buttons[i].clickType, buttons[i].clickCount);
   }
 
   delay(5);
 }
 
-void handleClickEvent(int button_id, ClickEventType type, uint8_t nr_clicks) {
+void clickEvent(int button_id, ClickEventType type, uint8_t nr_clicks) {
   char line[50];
   if (nr_clicks == 0)
     return;  // no event
@@ -84,9 +84,9 @@ void handleClickEvent(int button_id, ClickEventType type, uint8_t nr_clicks) {
 
   if (button_id >= 0 && button_id < kNrButtons && nr_clicks <= 3) {
     if (type == kClickEventRelease) {
-      win_ctl.ExecuteAction(&action_mapping[button_id][nr_clicks-1], true);
+      win_ctl.SetActionGroup(&action_mapping[button_id][nr_clicks-1], true);
     } else {
-      win_ctl.ExecuteAction(&action_mapping[button_id][nr_clicks-1], false);
+      win_ctl.SetActionGroup(&action_mapping[button_id][nr_clicks-1], false);
     }
   }
 }
@@ -139,7 +139,7 @@ void cmdHandleClick(int argc, char *argv[]) {
     return;
   }
 
-  handleClickEvent(button_id, ev_type, click_cnt);
+  clickEvent(button_id, ev_type, click_cnt);
 }
 
 void cmdHelpClick() {
