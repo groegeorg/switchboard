@@ -13,24 +13,24 @@ WindowControl win_ctl;
 // ClickButton settings
 const int kNrButtons = 18;
 ClickButton buttons[kNrButtons] = {
-  ClickButton(22, LOW, CLICKBTN_PULLUP),  //  0
-  ClickButton(23, LOW, CLICKBTN_PULLUP),  //  1
-  ClickButton(24, LOW, CLICKBTN_PULLUP),  //  2
-  ClickButton(25, LOW, CLICKBTN_PULLUP),  //  3
-  ClickButton(26, LOW, CLICKBTN_PULLUP),  //  4
-  ClickButton(27, LOW, CLICKBTN_PULLUP),  //  5
-  ClickButton(28, LOW, CLICKBTN_PULLUP),  //  6
-  ClickButton(29, LOW, CLICKBTN_PULLUP),  //  7
-  ClickButton(30, LOW, CLICKBTN_PULLUP),  //  8
-  ClickButton(31, LOW, CLICKBTN_PULLUP),  //  9
-  ClickButton(32, LOW, CLICKBTN_PULLUP),  // 10
-  ClickButton(33, LOW, CLICKBTN_PULLUP),  // 11
-  ClickButton(34, LOW, CLICKBTN_PULLUP),  // 12
-  ClickButton(35, LOW, CLICKBTN_PULLUP),  // 13
-  ClickButton(36, LOW, CLICKBTN_PULLUP),  // 14
-  ClickButton(37, LOW, CLICKBTN_PULLUP),  // 15
-  ClickButton(38, LOW, CLICKBTN_PULLUP),  // 16
-  ClickButton(39, LOW, CLICKBTN_PULLUP),  // 17
+  ClickButton(23, LOW, CLICKBTN_PULLUP),  //  0
+  ClickButton(22, LOW, CLICKBTN_PULLUP),  //  1
+  ClickButton(25, LOW, CLICKBTN_PULLUP),  //  2
+  ClickButton(24, LOW, CLICKBTN_PULLUP),  //  3
+  ClickButton(27, LOW, CLICKBTN_PULLUP),  //  4
+  ClickButton(26, LOW, CLICKBTN_PULLUP),  //  5
+  ClickButton(29, LOW, CLICKBTN_PULLUP),  //  6
+  ClickButton(28, LOW, CLICKBTN_PULLUP),  //  7
+  ClickButton(31, LOW, CLICKBTN_PULLUP),  //  8
+  ClickButton(30, LOW, CLICKBTN_PULLUP),  //  9
+  ClickButton(33, LOW, CLICKBTN_PULLUP),  // 10
+  ClickButton(32, LOW, CLICKBTN_PULLUP),  // 11
+  ClickButton(35, LOW, CLICKBTN_PULLUP),  // 12
+  ClickButton(34, LOW, CLICKBTN_PULLUP),  // 13
+  ClickButton(37, LOW, CLICKBTN_PULLUP),  // 14
+  ClickButton(36, LOW, CLICKBTN_PULLUP),  // 15
+  ClickButton(39, LOW, CLICKBTN_PULLUP),  // 16
+  ClickButton(38, LOW, CLICKBTN_PULLUP),  // 17
 };
 
 //          Window Nr:    0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15

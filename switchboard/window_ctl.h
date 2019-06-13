@@ -4,7 +4,7 @@
 const int kNrModules = 2;
 const int kNrWindowsPerModule = 8;
 const int kMaxNrWindows = 16;
-const long kMaxRunTime = 20000;     // maximum time to run in one direction (in ms)
+const long kMaxRunTime = 70000;     // maximum time to run in one direction (in ms)
 const long kPauseTime = 100;        // maximum time to pause between a direction change (in ms)
 
 #define WINDOW_ACTION_IGNORE                                          \
